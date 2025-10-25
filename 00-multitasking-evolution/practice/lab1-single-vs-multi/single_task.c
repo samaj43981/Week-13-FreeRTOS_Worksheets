@@ -6,6 +6,7 @@
 
 #define LED1_PIN GPIO_NUM_2
 #define LED2_PIN GPIO_NUM_4
+#define BUTTON_PIN GPIO_NUM_0
 
 static const char *TAG = "SINGLE_TASK";
 
@@ -22,14 +23,10 @@ void app_main(void)
     gpio_config(&io_conf);
 
     // Button configuration
-    gpio_config_t button_conf = {
-        .intr_type = GPIO_INTR_DISABLE,
-        .mode = GPIO_MODE_INPUT,
-        .pin_bit_mask = 1ULL << GPIO_NUM_0,
-        .pull_up_en = 1,
-        .pull_down_en = 0,
-    };
-    gpio_config(&button_conf);
+    io_conf.mode = GPIO_MODE_INPUT;
+    io_conf.pin_bit_mask = 1ULL << BUTTON_PIN;
+    io_conf.pull_up_en = 1;
+    gpio_config(&io_conf);
 
     ESP_LOGI(TAG, "Single Task System Started");
 
@@ -56,7 +53,7 @@ void app_main(void)
         vTaskDelay(pdMS_TO_TICKS(300));
 
         // Task 4: Check button (emergency response)
-        if (gpio_get_level(GPIO_NUM_0) == 0) {
+        if (gpio_get_level(BUTTON_PIN) == 0) {
             ESP_LOGW(TAG, "Button pressed! (Delayed response)");
             // Response is delayed because other tasks run first
         }

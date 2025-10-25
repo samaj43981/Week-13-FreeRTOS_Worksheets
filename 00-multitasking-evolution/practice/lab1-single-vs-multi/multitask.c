@@ -79,14 +79,10 @@ void app_main(void)
     gpio_config(&io_conf);
 
     // Button configuration
-    gpio_config_t button_conf = {
-        .intr_type = GPIO_INTR_DISABLE,
-        .mode = GPIO_MODE_INPUT,
-        .pin_bit_mask = 1ULL << BUTTON_PIN,
-        .pull_up_en = 1,
-        .pull_down_en = 0,
-    };
-    gpio_config(&button_conf);
+    io_conf.mode = GPIO_MODE_INPUT;
+    io_conf.pin_bit_mask = 1ULL << BUTTON_PIN;
+    io_conf.pull_up_en = 1;
+    gpio_config(&io_conf);
 
     ESP_LOGI(TAG, "Multitasking System Started");
 
